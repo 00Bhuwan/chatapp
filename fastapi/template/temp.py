@@ -10,13 +10,16 @@ html = """
         <input type="text" id="messageText" placeholder="Type a message...">
         <button onclick="sendMessage()">Send</button>
         <script>
-            var ws = new WebSocket("ws://localhost:8000/ws");
+            var clientId = Date.now();  // unique id per client
+            var ws = new WebSocket(`ws://localhost:8000/ws/${clientId}`);
+        
             ws.onmessage = function(event) {
                 var messages = document.getElementById('messages');
                 var message = document.createElement('div');
                 message.textContent = event.data;
                 messages.appendChild(message);
             };
+        
             function sendMessage() {
                 var input = document.getElementById('messageText');
                 ws.send(input.value);
